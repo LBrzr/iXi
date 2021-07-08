@@ -1,0 +1,61 @@
+name: iXi
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ripple_effect: ^0.1.1
+  rxdart: ^0.27.1
+  shared_preferences: ^2.0.6
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # rxdart:
+  # shared_preferences:
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
+  fonts:
+     - family: Signika
+       fonts:
+         - asset: fonts/Signika-Regular.ttf
+         - asset: fonts/Signika-Light.ttf
+           weight: 200
+         - asset: fonts/Signika-Medium.ttf
+           weight: 400
+         - asset: fonts/Signika-SemiBold.ttf
+           weight: 600
+         - asset: fonts/Signika-Bold.ttf
+           weight: 800
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
