@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ripple_effect: ^0.1.1
+  fluttertoast: ^8.0.7
   rxdart: ^0.27.1
   shared_preferences: ^2.0.6
 

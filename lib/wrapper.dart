@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:iXi/routes/connexion.dart';
-import 'package:iXi/routes/userSettings.dart';
 
+import 'blocs/user.dart';
+import 'routes/connexion.dart';
+import 'routes/userSettings.dart';
 import 'routes/app.dart';
 
 class Wrapper extends StatefulWidget {
@@ -15,7 +16,7 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
 
-  bool get isLogged => false;
+  bool get isLogged => UserBloc.instance.isLogged;
 
   @override
   void initState() {
@@ -42,7 +43,13 @@ class _WrapperState extends State<Wrapper> {
         primaryColorLight: Color(0xffB0B0FF),
         accentColor: Color(0xFF8181D5),
         secondaryHeaderColor: Color(0xFFDB9C84),
-        textTheme: Typography.blackCupertino.apply(fontFamily: 'Signika')
+        textTheme: Typography.blackCupertino.apply(fontFamily: 'Signika'),
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          }
+        )
       ),
       routes: {
         '/': isLogged ? _appRoute : _connexionRoute,

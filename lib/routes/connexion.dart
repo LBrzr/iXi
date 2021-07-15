@@ -2,6 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '/blocs/user.dart';
+import '/models/level.dart';
+import '/models/user.dart';
 
 class ConnexionRoute extends StatefulWidget {
   const ConnexionRoute({Key? key}) : super(key: key);
@@ -11,6 +16,7 @@ class ConnexionRoute extends StatefulWidget {
 }
 
 class _ConnexionRouteState extends State<ConnexionRoute> with SingleTickerProviderStateMixin {
+  final userBloc = UserBloc.instance;
   late Size size;
   late ThemeData theme;
   late TabController tabController;
@@ -18,10 +24,11 @@ class _ConnexionRouteState extends State<ConnexionRoute> with SingleTickerProvid
   final UnderlineInputBorder inputBorder = UnderlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid)),
     errorInputBorder = UnderlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 1, style: BorderStyle.solid));
   final GlobalKey<FormState> connexionFormKey = GlobalKey(), registrationFormKey = GlobalKey();
-  final TextEditingController pseudoController = TextEditingController(),
+  final TextEditingController usernameController = TextEditingController(),
       pwdController = TextEditingController(),
       confirmController = TextEditingController(),
       emailController = TextEditingController();
+  late Level level;
 
   @override
   void initState() {
@@ -92,6 +99,19 @@ class _ConnexionRouteState extends State<ConnexionRoute> with SingleTickerProvid
 
   navTo(index) => tabController.animateTo(index, curve: Curves.fastOutSlowIn);
 
+  Future<User?> login() => userBloc.login(username: usernameController.text, password: pwdController.text);
+  Future<User?> signUp() => userBloc.signup(email: emailController.text, password: pwdController.text, username: usernameController.text, level: level);
+
+  void validate(GlobalKey<FormState> key, Future<User?> Function() onValidate) {
+    if (key.currentState!.validate())
+      onValidate().then((user) {
+        if (user != null) {
+          Navigator.pushReplacementNamed(context, 'app');
+        }
+        Fluttertoast.showToast(msg: 'Erreur lors de la connexion');
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
@@ -109,7 +129,7 @@ class _ConnexionRouteState extends State<ConnexionRoute> with SingleTickerProvid
         fontStyle: FontStyle.italic
     );
 
-    final emailField = textField('Email', emailController, (val) => RegExp('[a-zA-Z0-9]+@[a-zA-Z]+.([a-zA-Z])+').hasMatch(val!) ? null : ' Email non valide', type: TextInputType.emailAddress);
+    final usernameField = textField('Nom d\'utilisateur', usernameController, (val) => val!.length >= 3 ? null : 'doit comporter au moins 3 caractères.', type: TextInputType.name);
 
     return Stack(
       fit: StackFit.expand,
@@ -151,10 +171,10 @@ class _ConnexionRouteState extends State<ConnexionRoute> with SingleTickerProvid
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        emailField,
+                        usernameField,
                         textField('Mot de passe', pwdController, (val) => val!.length >= 8 ? null : 'doit comporter au moins 8 caractères.', hide: true, action: TextInputAction.done),
                         textLink('Pas encore inscrit,','Créer un compte.', 2),
-                        whiteButton('Se Connecter', () => navTo(0), padH: 25, padV: 5)
+                        whiteButton('Se Connecter', () => validate(connexionFormKey, signUp), padH: 25, padV: 5)
                       ],
                     ),
                   ),
@@ -197,13 +217,13 @@ class _ConnexionRouteState extends State<ConnexionRoute> with SingleTickerProvid
 
                           ],
                         ),
-                        emailField,
-                        textField('Pseudo', pseudoController, (val) => val!.length >= 3 ? null : 'doit comporter au moins 3 caractères.', type: TextInputType.name),
+                        textField('Email', emailController, (val) => RegExp('[a-zA-Z0-9]+@[a-zA-Z]+.([a-zA-Z])+').hasMatch(val!) ? null : ' Email non valide', type: TextInputType.emailAddress),
+                        usernameField,
                         textField('Mot de passe', pwdController, (val) => val!.length >= 8 ? null : 'doit comporter au moins 8 caractères.', hide: true),
                         textField('Confirmez le mot de passe', confirmController, (val) => val == pwdController.text ? null : 'Mot de passe incorrect.',
                           hide: true, action: TextInputAction.done),
                         textLink('Déjà inscrit,','Connectez vous.', 1),
-                        whiteButton('Créer un compte', () => navTo(0), padH: 25, padV: 5)
+                        whiteButton('Créer un compte', () => validate(registrationFormKey, signUp), padH: 25, padV: 5)
                       ],
                     ),
                   ),
