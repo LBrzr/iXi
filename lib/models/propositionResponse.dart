@@ -16,4 +16,8 @@ class PropositionResponse {
   @override
   int get hashCode => super.hashCode;
 
+  @override
+  String toString() {
+    return 'PropositionResponse{id: $id, content: $content}';
+  }
 }
