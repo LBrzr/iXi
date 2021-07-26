@@ -19,7 +19,7 @@ class UserBloc {
   bool get isLogged => _user != null;
 
   Future<User> login({@required String username, @required String password}) {
-    return _connect(_api.login(email: username, password: password));
+    return _connect(_api.login(username: username, password: password));
   }
 
   Future<User> signup({@required String email, @required String password, @required String username, @required Level level}) {
@@ -29,7 +29,9 @@ class UserBloc {
   Future<User> _connect(Future<Map<String, dynamic>> task) async {
     return task.then((sessionData) {
       if (sessionData != null) {
-        return _user = _session.createSession(sessionData);
+        _user = _session.createSession(sessionData);
+        print('Session created for User: ${_user.toDisplay}'); // todo stack
+        return _user;
       } else {
         return null;
       }

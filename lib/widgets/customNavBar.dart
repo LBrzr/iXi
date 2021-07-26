@@ -54,7 +54,11 @@ class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
               ].map(buildButton).toList()
                 ..insert(2, GestureDetector(
                     onTap: widget.onPressed,
-                    child: Hero(tag: 'addButton', child: CustomIcons.add_fill)
+                    child: Material(
+                      elevation: 2.5,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      child: CustomIcons.add_fill
+                    )
                 )),
             ),
           ),

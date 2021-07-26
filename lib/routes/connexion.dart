@@ -159,6 +159,7 @@ class _ConnexionRouteState extends State<ConnexionRoute> with TickerProviderStat
     if (key.currentState.validate())
       onValidate().then((user) {
         if (user != null) {
+          print(user); // todo
           Navigator.pushReplacementNamed(context, 'app');
         } else Fluttertoast.showToast(msg: 'Erreur lors de la connexion');
       });

@@ -11,4 +11,6 @@ class User {
   String toString() {
     return 'User{id: $id, username: $username, email: $email, level: $level, pp: $pp}';
   }
+
+  String get toDisplay => '{username: $username, email: $email}';
 }

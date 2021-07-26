@@ -204,39 +204,53 @@ class Api {
   static const String _API_URL = 'https://ixi-api.herokuapp.com/';
   static final session = Session.instance;
 
-  Future<Map<String, dynamic>> login({@required String email, @required String password}) async {
-    return {'profile': _profile, 'token': _token};
-  }
+  Future<T> _sendRequest<T>(String method, String route, Map<String, dynamic> body, T Function(String) onOk, {Function onNotOk, addAuth = true}) async {
+    var request = Request(method, Uri.parse(_API_URL+route));
+    request.headers.addAll({'content-type': 'application/json'});
+    if (addAuth && session.token != null)
+      request.headers.addAll({'Authorization': 'Token ${session.token}'});
+    request.body = jsonEncode(body);
 
-  Future<bool> logout() async {
-    return true;
+    StreamedResponse response = await request.send();
+
+    final contents = await response.stream.bytesToString();
+    print(contents); // todo stack
+
+    final data = contents.toString();
+
+    if (response.statusCode == 200) {
+      return onOk(data);
+    } else {
+      print(response.reasonPhrase);
+      if (onNotOk != null)
+        return onNotOk();
+      return null;
+    }
   }
 
   Future<Map<String, dynamic>> signup({@required String email, @required String password, @required String username, @required int levelId}) async {
-    var request = Request('POST', Uri.parse(_API_URL+'account/register'));
-    request.headers.addAll({'content-type': 'application/json'});
-    request.body = jsonEncode({
+    final body = {
       'user': {
         'email': email,
         'password': password,
         'username': username,
       },
       'level': levelId
-    });
+    },
+    method = 'POST',
+    route = 'account/register';
+    return _sendRequest(method, route, body, jsonDecode).then((data) =>  data as Map<String, dynamic>);
+  }
 
-    StreamedResponse response = await request.send();
+  Future<Map<String, dynamic>> login({@required String username, @required String password}) async {
+    final body = {'password': password, 'username': username},
+    method = 'POST',
+    route = 'account/login';
+    return _sendRequest(method, route, body, jsonDecode).then((data) =>  jsonDecode(data) as Map<String, dynamic>);
+  }
 
-    final contents = await response.stream.bytesToString();
-    print(contents); // todo
-
-    final data = contents.toString();
-
-    if (response.statusCode == 200) {
-      return jsonDecode(data);
-    } else {
-      print(response.reasonPhrase);
-      return null;
-    }
+  Future<bool> logout() async {
+    return _sendRequest('POST', 'account/logout', {}, (data) => true, onNotOk: () => false);
   }
 
   Future<Map<String, dynamic>> updateUser(Map<String, dynamic> userData) async {
@@ -248,12 +262,6 @@ class Api {
     };
   }
 
-  /* todo
-  Future<Map<String, dynamic>?> searchFromCategory(int catId) async {
-    return null;
-  }
-   */
-
   Future<List<Map<String, dynamic>>> searchFromTheme(String theme) async {
     return null;
   }
@@ -263,17 +271,11 @@ class Api {
   }
 
   Future<Map<String, dynamic>> creatQuiz() async {
-
-  }
-
-  Future<Map<String, dynamic>> creatCategory() async {
-
+    // todo return _sendRequest('GET', 'quiz/tags', {}, (data) => (data as List<String>).toSet());
   }
 
   Future<Set<String>> get tags async {
-    final tags = Set<String>();
-    _quiz.forEach((quiz) => tags.addAll(quiz['tags'] as Iterable<String>));
-    return tags;
+    return _sendRequest('GET', 'quiz/tags', {}, (data) => Set.from(jsonDecode(data)));
   }
 
   Future<List<Map<String, dynamic>>> get levels async {
@@ -294,11 +296,18 @@ class Api {
     }
   }
 
-  Future<List<Map<String, dynamic>>> suggestions(int levelId) async {
-    return _quiz;
+  Future<List> suggestions(int levelId) async {
+    print('getting suggestions'); // todo stack
+    return _sendRequest('GET', 'quiz', {'level': levelId}, (data) => jsonDecode(data));
   }
 
-  Future<List<Map<String, dynamic>>> userQuiz(int uid) async {
-    return _quiz;
+  Future<List> get userQuiz async {
+    print('getting user quiz'); // todo stack
+    return _sendRequest('GET', 'quiz/user', {}, (data) => jsonDecode(data));
+  }
+
+  Future<Map<String, dynamic>> get userStats async {
+    print('getting user stats'); // todo stack
+    return _sendRequest('GET', 'quiz/user/stats', {}, (data) => jsonDecode(data) as Map<String, dynamic>);
   }
 }

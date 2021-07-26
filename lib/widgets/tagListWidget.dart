@@ -16,8 +16,10 @@ class TagListWidget extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-          children: tags.map((tag) => Text('# $tag', style: TextStyle(decoration: TextDecoration.underline, color: theme.primaryColorDark),))
-              .toList()..insert(0, Text('Quiz tags: '))
+          children: tags.map<Widget>((tag) => Padding(
+            padding: const EdgeInsets.only(right: 3),
+            child: Text('#$tag', style: TextStyle(decoration: TextDecoration.underline, color: theme.primaryColorDark),),
+          )).toList()..insert(0, Text('Quiz tags: '))
       ),
     );
   }

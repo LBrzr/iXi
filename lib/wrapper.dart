@@ -66,7 +66,7 @@ class _WrapperState extends State<Wrapper> {
       ),
       routes: {
         '/': isLogged ? _appRoute : _connexionRoute,
-        'app': _connexionRoute,
+        'app': _appRoute,
         'userSettings': _settingsRoute,
         'quiz': _quizRoute
       },

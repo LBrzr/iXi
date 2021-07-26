@@ -17,7 +17,9 @@ Widget buildQuestion(Question question, int index) => Padding(
   ),
 );
 
-Widget buildNote(num note) => Text('$note/5', style: TextStyle(fontWeight: FontWeight.w700)); // todo
+Widget buildNote(num note) => Text(
+  note != null ? '$note/5' : 'new',
+  style: TextStyle(fontWeight: FontWeight.w700)); // todo
 
 class QuizWidget extends StatelessWidget {
   const QuizWidget({Key key, @required this.quiz, this.showShare = false}) : super(key: key);

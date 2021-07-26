@@ -1,10 +1,11 @@
 class PropositionResponse {
   final int id;
+  final bool isResponse;
   final String content;
 
-  PropositionResponse._(this.id, this.content);
+  PropositionResponse._(this.id, this.content, this.isResponse);
 
-  factory PropositionResponse.fromJson(Map<String, dynamic> data) => PropositionResponse._(data['id'], data['content']);
+  factory PropositionResponse.fromJson(Map<String, dynamic> data) => PropositionResponse._(data['id'], data['content'], data['is_response']);
 
   @override
   bool operator == (Object other) {

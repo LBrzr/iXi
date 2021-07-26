@@ -5,7 +5,7 @@ import 'package:iXi/blocs/session.dart';
 import 'package:iXi/widgets/delegate.dart';
 
 import '/widgets/customDivider.dart';
-import '/widgets/futureQuizListWidget.dart';
+import '/widgets/streamQuizListWidget.dart';
 import '/widgets/optionButton.dart';
 
 import '/blocs/quiz.dart';
@@ -92,11 +92,12 @@ class _HomePageState extends State<HomePage> {
             ];
           },
           body: TabBarView(
+            physics: const BouncingScrollPhysics(),
             children: [
-              FutureQuizListWidget(future: quiz.suggestions, separatorColor: theme.backgroundColor),
+              StreamQuizListWidget(stream: quiz.suggestions, separatorColor: theme.backgroundColor),
               ListView.builder(
                 itemCount: 50,
-                itemBuilder: (conetxt, index) => Center(child: Text('activités'))
+                itemBuilder: (context, index) => Center(child: Text('activités'))
               )
             ],
           ),

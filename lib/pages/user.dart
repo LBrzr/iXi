@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +27,7 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
   static final quizs = QuizBloc.instance, users = UserBloc.instance;
   final titleKey = GlobalKey();
   final scrollController = ScrollController();
+  StreamSubscription subscription;
   User user;
   ThemeData theme;
   List<Quiz> quizList;
@@ -33,7 +36,7 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     user = users.user;
-    quizs.fromUser.then((quizs) => setState(() => this.quizList = quizs));
+    subscription = quizs.fromUser.listen((quizs) => setState(() => this.quizList = quizs));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() => titleSize = titleKey.currentContext.size);
     });
@@ -42,6 +45,7 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
+    subscription.cancel();
     super.dispose();
   }
 
@@ -205,12 +209,13 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
               ? Transform.translate(
                 offset: const Offset(0, -25),
                 child: TabBarView(
-                      children: [
-                        buildQuizList(quizList, true),
-                        buildQuizList(quizList.where((quiz) => !quiz.visible).toList(growable: false)),
-                        buildQuizList(quizList.where((quiz) => quiz.visible).toList(growable: false))
-                      ],
-                  )
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    buildQuizList(quizList, true),
+                    buildQuizList(quizList.where((quiz) => !quiz.visible).toList(growable: false)),
+                    buildQuizList(quizList.where((quiz) => quiz.visible).toList(growable: false))
+                  ],
+                )
               ) : LoadingIcon(),
         ),
       ),

@@ -6,7 +6,7 @@ import '/blocs/tag.dart';
 import '/blocs/quiz.dart';
 import '/widgets/borderWidget.dart';
 import '/widgets/delegate.dart';
-import '/widgets/futureQuizListWidget.dart';
+import '/widgets/streamQuizListWidget.dart';
 import '/widgets/optionButton.dart';
 import '/widgets/customDivider.dart';
 
@@ -18,7 +18,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  static const TAGS_TEXT_HEIGHT = 27, TAGS_LIST_HEIGHT = 48.5;
+  static const TAGS_TEXT_HEIGHT = 18, TAGS_LIST_HEIGHT = 48.5;
   static final quiz = QuizBloc.instance, tags = TagBloc.instance;
   final scrollController = ScrollController();
   ThemeData theme;
@@ -69,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
           child: AnimatedBuilder(
               animation: scrollController,
               builder: (context, child) {
-                if (scrollController.positions.first.pixels > TAGS_TEXT_HEIGHT -.5)
+                if (scrollController.positions.first.pixels > .0)
                   return child;
                 else return SizedBox.shrink();
               },
@@ -99,42 +99,55 @@ class _SearchPageState extends State<SearchPage> {
                 min: TAGS_LIST_HEIGHT,
                 child: ColoredBox(
                   color: theme.backgroundColor,
-                  child: SizedBox(
-                    width: size.width,
-                    height: TAGS_LIST_HEIGHT,
-                    child: FutureBuilder<Set<String>>(
-                        future: tags.all,
-                        builder: (context, snapshot) {
-                          return snapshot.hasData ? ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (context, index) => Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                  child: BorderWidget(child: Text(snapshot.data.elementAt(index)),
-                                  ))
-                          ) : ListView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 4,
-                              itemBuilder: (context, index) => Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: theme.disabledColor, // .withOpacity(.15),
-                                  child: SizedBox.fromSize(size: Size(85, 30))
-                                ),
-                              )
-                          );
-                        }
-                    ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: size.width,
+                        height: TAGS_LIST_HEIGHT,
+                        child: StreamBuilder<Set<String>>(
+                            stream: tags.all,
+                            builder: (context, snapshot) {
+                              return snapshot.hasData ? ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, index) => Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                                      child: BorderWidget(child: Text(snapshot.data.elementAt(index)),
+                                      ))
+                              ) : ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 4,
+                                  itemBuilder: (context, index) => Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                    child: Material(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: theme.disabledColor, // .withOpacity(.15),
+                                      child: SizedBox.fromSize(size: Size(85, 30))
+                                    ),
+                                  )
+                              );
+                            }
+                        ),
+                      ),
+                      AnimatedBuilder(
+                          animation: scrollController,
+                          builder: (context, child) {
+                            if (scrollController.positions.first.pixels > TAGS_TEXT_HEIGHT -.5)
+                              return child;
+                            else return SizedBox.shrink();
+                          },
+                          child: CustomDivider()
+                      ),
+                    ],
                   ),
                 ),
               ),
             )
           ];
         },
-        body: FutureQuizListWidget(future: quiz.suggestions, separatorColor: theme.backgroundColor)
+        body: StreamQuizListWidget(stream: quiz.suggestions, separatorColor: theme.backgroundColor)
       ),
     );
   }

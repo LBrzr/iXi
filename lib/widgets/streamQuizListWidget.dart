@@ -5,18 +5,20 @@ import 'package:iXi/models/quiz.dart';
 import 'QuizWidget.dart';
 import 'loadingIcon.dart';
 
-class FutureQuizListWidget extends StatelessWidget {
+class StreamQuizListWidget extends StatelessWidget {
 
-  const FutureQuizListWidget({@required this.future, Key key, @required this.separatorColor}) : super(key: key);
+  const StreamQuizListWidget({@required this.stream, Key key, @required this.separatorColor}) : super(key: key);
 
   final Color separatorColor;
-  final Future<List<Quiz>> future;
+  final Stream<List<Quiz>> stream;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Quiz>>(
-          future: future,
+    return StreamBuilder<List<Quiz>>(
+          stream: stream,
           builder: (context, snapshot) {
+            print('List ' +(snapshot.hasData ? 'gotten' : 'not yet gotten')); // todo
+            print(snapshot.data?.length);
             return snapshot.hasData ? ListView.separated(
               physics: const BouncingScrollPhysics(),
               itemCount: snapshot.data.length,
