@@ -1,6 +1,13 @@
 # Projet iXi
 
 Application Android d'aide à la révision et de création et partage de fiches de révision personnalisées.
+[Back-end associé](https://github.com/LBrzr/ixi-api)
+
+### Principe
+- Créer ses propres fiches de revision, sur differents sujets ou matières sous forme de QCM.
+- A chaque question est associée un tag; Réviser de manière ludique; Toujours avoir sur sois ses fiches de révisions.
+- Le plus important, les statistiques: les reponses que l'on donne à chaque question etant enregistrées,
+les statistiques générées permettront de connaître ses points forts et les sujet que l'on maîtrise moins grâce aux tags.
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
@@ -22,12 +29,6 @@ Application Android d'aide à la révision et de création et partage de fiches 
   * [x] Affichage du score et enregistrement des réponses 
 * [x] Statistiques
   * [x] Taux de bonne reponses par tag 
-
-## Pour commencer
-
-### Pré-requis
-
-- [Flutter](https://www.flutter.dev/)
 
 ## Fait avec
 
