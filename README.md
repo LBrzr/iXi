@@ -1,16 +1,43 @@
-# ixi
+# Projet iXi
 
-A new Flutter project.
+Application Android d'aide à la révision et de création et partage de fiches de révision personnalisées.
 
-## Getting Started
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
-This project is a starting point for a Flutter application.
+## Roadmap
+* [x] Gestion utilisateur 
+  * [x] Création de compte 
+  * [x] Connexion/déconnexion 
+  * [x] Modification du profil
+* [x] Gestion des fiches de révision
+  * [x] Création/Modification/Suppression
+  * [x] Partage (Mise en public/privé)
+  * [x] Recherche par tag et contenu des questions
+* [ ] Modération
+  * [ ] Signalement
+  * [ ] Gestion des commentaires
+* [x] Jeu/Révision 
+  * [x] Liste de QCM
+  * [x] Reponse aux questions
+  * [x] Affichage du score et enregistrement des réponses 
+* [x] Statistiques
+  * [x] Taux de bonne reponses par tag 
 
-A few resources to get you started if this is your first Flutter project:
+## Pour commencer
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Pré-requis
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Flutter](https://www.flutter.dev/)
+
+## Fait avec
+
+* [Flutter](flutter.dev) - Framework (front-end)
+* [Lottie](https://lottiefiles.com/what-is-lottie) - Animation library
+* [IntelliJ Idea](https://www.jetbrains.com/fr-fr/idea/) - IDE
+
+## Contributeurs
+
+* [@TomaMata21](https://github.com/TomaMata21)
+* [@Luney004](https://github.com/Luney004)
+
+
